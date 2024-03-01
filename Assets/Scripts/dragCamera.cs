@@ -16,11 +16,7 @@ public class dragCamera : MonoBehaviour
     private Vector3 _targetPosition;
 
 
-    private void Awake()
-    {
-        _mainCamera = Camera.main;
-
-    }
+    private void Awake() => _mainCamera = Camera.main;
 
     public void onDrag(InputAction.CallbackContext ctx)
     {
@@ -49,9 +45,9 @@ public class dragCamera : MonoBehaviour
         //set camera bounds
         _cameraBounds = new Bounds();
         _cameraBounds.SetMinMax(
-            new Vector3(minX, minY, 0),
-            new Vector3(maxX, maxY, 0)
-        );
+            new Vector3(minX, minY, 0.0f),
+            new Vector3(maxX, maxY, 0.0f)
+            );
     }
 
     //take care of camera movement
@@ -69,6 +65,7 @@ public class dragCamera : MonoBehaviour
         transform.position = _targetPosition;
     }
 
+    //restrict camera movement
     private Vector3 GetCameraBounds()
     {
         return new Vector3(
