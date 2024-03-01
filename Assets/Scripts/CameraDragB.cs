@@ -28,17 +28,24 @@ public class CameraDragB : MonoBehaviour
                 origin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
         }
-        else 
+        else
         {
-            dragging = false;        
+            dragging = false;
         }
 
-        if (dragging) 
+        if (dragging)
         {
             Camera.main.transform.position = origin - difference;
+            Camera.main.transform.position = new Vector3(
+                Mathf.Clamp(Camera.main.transform.position.x, 300, 500),
+                Mathf.Clamp(Camera.main.transform.position.y, 200, 365),
+                transform.position.z
+                );
         }
+
 
         //if (Input.GetMouseButton(1))
         //    Camera.main.transform.position = resetCamera;
-    }
+        // uncomment for reset camera functionality, i don't think it's necessary atm
+    } 
 }
