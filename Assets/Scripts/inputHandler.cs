@@ -23,6 +23,9 @@ public class inputHandler : MonoBehaviour
 
         //now we are clicking on an object with a collider
         Debug.Log(rayHit.collider.gameObject.name + " clicked!");
+
+       // var currentSprite = GetComponent(rayHit.collider.gameObject.name);
+       // currentSprite.color
     }
 
 }
