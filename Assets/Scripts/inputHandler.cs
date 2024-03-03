@@ -22,10 +22,19 @@ public class inputHandler : MonoBehaviour
         if (!rayHit.collider) return;
 
         //now we are clicking on an object with a collider
-        Debug.Log(rayHit.collider.gameObject.name + " clicked!");
+        // Debug.Log(rayHit.collider.gameObject.name + " clicked!");
 
-       // var currentSprite = GetComponent(rayHit.collider.gameObject.name);
-       // currentSprite.color
+        //Color myColour = new Color(255, 218, 250, 1); i'm not sure why, but doesn't update colour visually but it recognises colour has 'changed'
+        Color myColour = new Vector4(1f, 0.85f, 0.98f, 1f); //hex ffdafa is the target
+
+        if (rayHit.collider.GetComponent<SpriteRenderer>().color == myColour)
+        {
+            print(rayHit.collider.gameObject.name + " colour already changed!");
+            return;
+        }
+
+        rayHit.collider.GetComponent<SpriteRenderer>().color = myColour;
+        print(rayHit.collider.gameObject.name + " colour changed but smartly! ");
     }
 
 }
