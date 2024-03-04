@@ -2,10 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class inputHandler : MonoBehaviour
 {
     private Camera _mainCamera;
+    //public SpriteRenderer spriteRendererNew;
+    //public Sprite newSprite;
+
+    public TextMeshProUGUI numberText;
+    int counter = 2;
 
     private void Awake()
     {
@@ -35,6 +41,16 @@ public class inputHandler : MonoBehaviour
 
         rayHit.collider.GetComponent<SpriteRenderer>().color = myColour;
         print(rayHit.collider.gameObject.name + " colour changed but smartly! ");
+        counter--;
+        numberText.text = counter + "";
+
+        //ChangeSprite(rayHit.collider.GetComponent<SpriteRenderer>().sprite);
+
     }
+
+    /*public void ChangeSprite(Sprite sprite)
+    {
+        spriteRendererNew.sprite = newSprite;
+    }*/
 
 }
