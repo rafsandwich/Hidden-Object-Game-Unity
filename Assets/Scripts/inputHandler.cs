@@ -13,6 +13,10 @@ public class inputHandler : MonoBehaviour
     public TextMeshProUGUI numberText;
     int counter = 2;
 
+    public ParticleSystem particles;
+
+    public AudioClip soundClip;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -41,8 +45,14 @@ public class inputHandler : MonoBehaviour
 
         rayHit.collider.GetComponent<SpriteRenderer>().color = myColour;
         print(rayHit.collider.gameObject.name + " colour changed but smartly! ");
+
         counter--;
         numberText.text = counter + "";
+
+        particles.transform.position = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+        particles.Play();
+
+        GetComponent<AudioSource>().PlayOneShot(soundClip);
 
         //ChangeSprite(rayHit.collider.GetComponent<SpriteRenderer>().sprite);
 
