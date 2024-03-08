@@ -1546,6 +1546,8 @@ MonoBehaviour:
   particles: {fileID: 1849977703}
   soundClip: {fileID: 8300000, guid: 9f0b9d7363657ca4d8a9b0711f76d3af, type: 3}
   winPanel: {fileID: 259964047}
+  dragCamScript: {fileID: 0}
+  targetCameraSize: 150
 --- !u!114 &1178771493
 MonoBehaviour:
   m_ObjectHideFlags: 0

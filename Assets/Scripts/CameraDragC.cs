@@ -16,6 +16,8 @@ public class CameraDragC : MonoBehaviour
 
     private float mapMinX, mapMaxX, mapMinY, mapMaxY;
 
+    public bool IsEnabled { get; set; } = true;
+
 
 
     private Vector3 dragOrigin;
@@ -31,14 +33,17 @@ public class CameraDragC : MonoBehaviour
 
     private void Update()
     {
-        PanCamera();
-        if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+        if (IsEnabled)
         {
-            ZoomIn();
-        }
-        else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
-        {
-            ZoomOut();
+            PanCamera();
+            if (Input.GetAxis("Mouse ScrollWheel") > 0f) // forward
+            {
+                ZoomIn();
+            }
+            else if (Input.GetAxis("Mouse ScrollWheel") < 0f) // backwards
+            {
+                ZoomOut();
+            }
         }
     }
 

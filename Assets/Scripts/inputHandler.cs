@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using TMPro;
 using System;
 using UnityEngine.UI;
+using Unity.VisualScripting;
 
 public class inputHandler : MonoBehaviour
 {
@@ -23,9 +24,14 @@ public class inputHandler : MonoBehaviour
 
     public GameObject winPanel;
 
+    public CameraDragC dragCamScript;
+
+    public float targetCameraSize = 220f;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
+        dragCamScript = Camera.main.GetComponent<CameraDragC>();
     }
 
     public void OnClick(InputAction.CallbackContext context)
@@ -80,7 +86,9 @@ public class inputHandler : MonoBehaviour
         }
 
         // fade in the panel
+        DisablePlayerInteractions();
         yield return FadeCanvasGroup(panelCanvasGroup, 0f, 1f, duration);
+        yield return ZoomOutCamera(_mainCamera, targetCameraSize, 5f);
     }
 
     IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float startAlpha, float targetAlpha, float duration)
@@ -100,6 +108,32 @@ public class inputHandler : MonoBehaviour
         canvasGroup.alpha = targetAlpha;
     }
 
+    IEnumerator ZoomOutCamera(Camera camera, float targetSize, float duration)
+    {
+        float elapsedTime = 0f;
+        float startSize = camera.orthographicSize;
+
+        while (elapsedTime < duration)
+        {
+            camera.orthographicSize = Mathf.Lerp(startSize, targetSize, elapsedTime / duration);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure the final camera size is set
+        camera.orthographicSize = targetSize;
+    }
+
+
+    void DisablePlayerInteractions()
+    {
+        // Disable the drag camera script
+        if (dragCamScript != null)
+        {
+            dragCamScript.enabled = false;
+        }
+    }
 
 
 
