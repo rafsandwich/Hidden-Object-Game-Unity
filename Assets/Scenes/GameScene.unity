@@ -629,7 +629,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &259964048
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1542,8 +1542,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numberText: {fileID: 1120951771}
+  counter: 2
   particles: {fileID: 1849977703}
   soundClip: {fileID: 8300000, guid: 9f0b9d7363657ca4d8a9b0711f76d3af, type: 3}
+  winPanel: {fileID: 259964047}
 --- !u!114 &1178771493
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System;
+using UnityEngine.UI;
 
 public class inputHandler : MonoBehaviour
 {
@@ -11,11 +13,15 @@ public class inputHandler : MonoBehaviour
     //public Sprite newSprite;
 
     public TextMeshProUGUI numberText;
-    int counter = 2;
+    public int counter = 2;
+
+    //public bool gameIsRunning = true;
 
     public ParticleSystem particles;
 
     public AudioClip soundClip;
+
+    public GameObject winPanel;
 
     private void Awake()
     {
@@ -54,13 +60,57 @@ public class inputHandler : MonoBehaviour
 
         GetComponent<AudioSource>().PlayOneShot(soundClip);
 
+        if (counter <= 0)
+        {
+            winPanel.SetActive(true);
+            StartCoroutine(FadeInWinPanel(winPanel, 1f));
+        }
+
         //ChangeSprite(rayHit.collider.GetComponent<SpriteRenderer>().sprite);
 
     }
+
+    IEnumerator FadeInWinPanel(GameObject panel, float duration)
+    {
+        // get or add CanvasGroup component to panel so we can fade in parent and children
+        CanvasGroup panelCanvasGroup = panel.GetComponent<CanvasGroup>();
+        if (panelCanvasGroup == null)
+        {
+            panelCanvasGroup = panel.AddComponent<CanvasGroup>();
+        }
+
+        // fade in the panel
+        yield return FadeCanvasGroup(panelCanvasGroup, 0f, 1f, duration);
+    }
+
+    IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float startAlpha, float targetAlpha, float duration)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            // gradually change alpha value for fade in effect
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / duration);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // ensure final alpha value is set
+        canvasGroup.alpha = targetAlpha;
+    }
+
+
+
+
+
+
+
 
     /*public void ChangeSprite(Sprite sprite)
     {
         spriteRendererNew.sprite = newSprite;
     }*/
+
 
 }
