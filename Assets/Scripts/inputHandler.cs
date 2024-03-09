@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+
 using TMPro;
 using System;
-using UnityEngine.UI;
 using Unity.VisualScripting;
 
 public class inputHandler : MonoBehaviour
@@ -30,6 +32,14 @@ public class inputHandler : MonoBehaviour
     public float initialCameraSize;
     public Vector3 initialCameraPosition;
 
+    public Button zoomIn;
+    public Button zoomOut;
+
+    private WinMenuHandler winMenuHandler;
+
+    public Button quitButton;
+    public Button playAgainButton;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -37,6 +47,10 @@ public class inputHandler : MonoBehaviour
 
         initialCameraPosition = _mainCamera.transform.position;
         initialCameraSize = _mainCamera.orthographicSize;
+
+        winMenuHandler = gameObject.AddComponent<WinMenuHandler>();
+        winMenuHandler.quitButton = quitButton;
+        winMenuHandler.playAgainButton = playAgainButton;
     }
 
     public void OnClick(InputAction.CallbackContext context)
@@ -129,7 +143,7 @@ public class inputHandler : MonoBehaviour
             yield return null;
         }
 
-        // Ensure the final camera position & size are set
+        // ensure the final camera position & size are set
         camera.orthographicSize = initialSize;
         camera.transform.position = initialPosition;
     }
@@ -141,6 +155,10 @@ public class inputHandler : MonoBehaviour
         if (dragCamScript != null)
         {
             dragCamScript.enabled = false;
+            //zoomIn.interactable = false;
+            zoomIn.gameObject.SetActive(false);
+            zoomOut.gameObject.SetActive(false);
+
         }
     }
 

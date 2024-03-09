@@ -1547,7 +1547,12 @@ MonoBehaviour:
   soundClip: {fileID: 8300000, guid: 9f0b9d7363657ca4d8a9b0711f76d3af, type: 3}
   winPanel: {fileID: 259964047}
   dragCamScript: {fileID: 0}
-  targetCameraSize: 150
+  initialCameraSize: 0
+  initialCameraPosition: {x: 0, y: 0, z: 0}
+  zoomIn: {fileID: 1630045560}
+  zoomOut: {fileID: 1341136997}
+  quitButton: {fileID: 63397361}
+  playAgainButton: {fileID: 641591181}
 --- !u!114 &1178771493
 MonoBehaviour:
   m_ObjectHideFlags: 0
