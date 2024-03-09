@@ -26,12 +26,17 @@ public class inputHandler : MonoBehaviour
 
     public CameraDragC dragCamScript;
 
-    public float targetCameraSize = 220f;
+    //public float targetCameraSize = 220f;
+    public float initialCameraSize;
+    public Vector3 initialCameraPosition;
 
     private void Awake()
     {
         _mainCamera = Camera.main;
         dragCamScript = Camera.main.GetComponent<CameraDragC>();
+
+        initialCameraPosition = _mainCamera.transform.position;
+        initialCameraSize = _mainCamera.orthographicSize;
     }
 
     public void OnClick(InputAction.CallbackContext context)
@@ -87,8 +92,8 @@ public class inputHandler : MonoBehaviour
 
         // fade in the panel
         DisablePlayerInteractions();
+        yield return ZoomOutCamera(_mainCamera, initialCameraPosition, initialCameraSize, 5f);
         yield return FadeCanvasGroup(panelCanvasGroup, 0f, 1f, duration);
-        yield return ZoomOutCamera(_mainCamera, targetCameraSize, 5f);
     }
 
     IEnumerator FadeCanvasGroup(CanvasGroup canvasGroup, float startAlpha, float targetAlpha, float duration)
@@ -108,21 +113,25 @@ public class inputHandler : MonoBehaviour
         canvasGroup.alpha = targetAlpha;
     }
 
-    IEnumerator ZoomOutCamera(Camera camera, float targetSize, float duration)
+    IEnumerator ZoomOutCamera(Camera camera, Vector3 initialPosition, float initialSize, float duration)
     {
         float elapsedTime = 0f;
-        float startSize = camera.orthographicSize;
 
         while (elapsedTime < duration)
         {
-            camera.orthographicSize = Mathf.Lerp(startSize, targetSize, elapsedTime / duration);
+            // gradually interpolate camera position
+            camera.transform.position = Vector3.Lerp(camera.transform.position, initialPosition, elapsedTime / duration);
+
+            // gradually interpolate camera size
+            camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, initialSize, elapsedTime / duration);
 
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        // Ensure the final camera size is set
-        camera.orthographicSize = targetSize;
+        // Ensure the final camera position & size are set
+        camera.orthographicSize = initialSize;
+        camera.transform.position = initialPosition;
     }
 
 
