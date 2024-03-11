@@ -18,7 +18,7 @@ public class inputHandler : MonoBehaviour
     public TextMeshProUGUI numberText;
     public int counter = 2;
 
-    //public bool gameIsRunning = true;
+    private bool gameIsRunning = true;
 
     public ParticleSystem particles;
 
@@ -40,6 +40,8 @@ public class inputHandler : MonoBehaviour
     public Button quitButton;
     public Button playAgainButton;
 
+    public Canvas optionCanvas;
+
     private void Awake()
     {
         _mainCamera = Camera.main;
@@ -51,6 +53,19 @@ public class inputHandler : MonoBehaviour
         winMenuHandler = gameObject.AddComponent<WinMenuHandler>();
         winMenuHandler.quitButton = quitButton;
         winMenuHandler.playAgainButton = playAgainButton;
+    }
+    void Update()
+    {
+        if (gameIsRunning)
+        {
+            // if esc pressed, toggle
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Debug.Log("esc key pressed ");
+                ToggleOptionsScreen();
+            }
+
+        }
     }
 
     public void OnClick(InputAction.CallbackContext context)
@@ -87,8 +102,8 @@ public class inputHandler : MonoBehaviour
 
         if (counter <= 0)
         {
-            winPanel.SetActive(true);
-            StartCoroutine(FadeInWinPanel(winPanel, 1f));
+            //winPanel.SetActive(true);
+            StartCoroutine(FadeInWinPanel(winPanel, 0.5f));
         }
 
         //ChangeSprite(rayHit.collider.GetComponent<SpriteRenderer>().sprite);
@@ -97,6 +112,14 @@ public class inputHandler : MonoBehaviour
 
     IEnumerator FadeInWinPanel(GameObject panel, float duration)
     {
+
+        gameIsRunning = false;
+        DisablePlayerInteractions();
+
+        yield return ZoomOutCamera(_mainCamera, initialCameraPosition, initialCameraSize, 0.5f);
+        winPanel.SetActive(true);
+
+
         // get or add CanvasGroup component to panel so we can fade in parent and children
         CanvasGroup panelCanvasGroup = panel.GetComponent<CanvasGroup>();
         if (panelCanvasGroup == null)
@@ -105,8 +128,7 @@ public class inputHandler : MonoBehaviour
         }
 
         // fade in the panel
-        DisablePlayerInteractions();
-        yield return ZoomOutCamera(_mainCamera, initialCameraPosition, initialCameraSize, 5f);
+
         yield return FadeCanvasGroup(panelCanvasGroup, 0f, 1f, duration);
     }
 
@@ -149,9 +171,9 @@ public class inputHandler : MonoBehaviour
     }
 
 
-    void DisablePlayerInteractions()
+    public void DisablePlayerInteractions()
     {
-        // Disable the drag camera script
+        // disable the drag camera script
         if (dragCamScript != null)
         {
             dragCamScript.enabled = false;
@@ -162,12 +184,34 @@ public class inputHandler : MonoBehaviour
         }
     }
 
+    public void EnablePlayerInteractions()
+    {
+        // enable interactions with the background scene
+        if (dragCamScript != null)
+        {
+            dragCamScript.enabled = true;
+            zoomIn.gameObject.SetActive(true);
+            zoomOut.gameObject.SetActive(true);
+        }
+    }
 
-
-
-
-
-
+    public void ToggleOptionsScreen() 
+    {
+        if (gameIsRunning)
+        {
+            // are we opening or closing options screen?
+            if (optionCanvas.isActiveAndEnabled)
+            {
+                EnablePlayerInteractions();
+                optionCanvas.gameObject.SetActive(false);
+            }
+            else
+            {
+                DisablePlayerInteractions();
+                optionCanvas.gameObject.SetActive(true);
+            }
+        }
+    }
     /*public void ChangeSprite(Sprite sprite)
     {
         spriteRendererNew.sprite = newSprite;
