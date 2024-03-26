@@ -41,6 +41,7 @@ public class inputHandler : MonoBehaviour
     public Button playAgainButton;
 
     public Canvas optionCanvas;
+    public Button optionQuitButton;
 
     private void Awake()
     {
@@ -54,6 +55,16 @@ public class inputHandler : MonoBehaviour
         winMenuHandler.quitButton = quitButton;
         winMenuHandler.playAgainButton = playAgainButton;
     }
+
+    void Start()
+    {
+        //options quit button
+        if (optionQuitButton != null)
+        {
+            optionQuitButton.onClick.AddListener(QuitGame);
+        }
+    }
+
     void Update()
     {
         if (gameIsRunning)
@@ -221,6 +232,11 @@ public class inputHandler : MonoBehaviour
     {
         spriteRendererNew.sprite = newSprite;
     }*/
+    public void QuitGame()
+    {
+        Debug.Log("options quit button clicked");
+        Application.Quit();
+    }
 
 
 }
