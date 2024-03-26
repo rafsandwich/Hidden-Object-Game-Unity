@@ -70,44 +70,49 @@ public class inputHandler : MonoBehaviour
 
     public void OnClick(InputAction.CallbackContext context)
     {
-        //only happen when player clicks
-        if (!context.started) return;
-
-        var rayHit = Physics2D.GetRayIntersection(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()));
-        //check if we are clicking something with an event
-        if (!rayHit.collider) return;
-
-        //now we are clicking on an object with a collider
-        // Debug.Log(rayHit.collider.gameObject.name + " clicked!");
-
-        //Color myColour = new Color(255, 218, 250, 1); i'm not sure why, but doesn't update colour visually but it recognises colour has 'changed'
-        Color myColour = new Vector4(1f, 0.85f, 0.98f, 1f); //hex ffdafa is the target
-
-        if (rayHit.collider.GetComponent<SpriteRenderer>().color == myColour)
+        if (!optionCanvas.gameObject.activeSelf) //don't let player interact if options is open
         {
-            print(rayHit.collider.gameObject.name + " colour already changed!");
-            return;
+            //only happen when player clicks
+            if (!context.started) return;
+
+            var rayHit = Physics2D.GetRayIntersection(_mainCamera.ScreenPointToRay(Mouse.current.position.ReadValue()));
+            //check if we are clicking something with an event
+            if (!rayHit.collider) return;
+
+            //now we are clicking on an object with a collider
+            // Debug.Log(rayHit.collider.gameObject.name + " clicked!");
+
+            //Color myColour = new Color(255, 218, 250, 1); i'm not sure why, but doesn't update colour visually but it recognises colour has 'changed'
+            Color myColour = new Vector4(1f, 0.85f, 0.98f, 1f); //hex ffdafa is the target
+
+            if (rayHit.collider.GetComponent<SpriteRenderer>().color == myColour)
+            {
+                print(rayHit.collider.gameObject.name + " colour already changed!");
+                return;
+            }
+
+            rayHit.collider.GetComponent<SpriteRenderer>().color = myColour;
+            print(rayHit.collider.gameObject.name + " colour changed but smartly! ");
+
+            counter--;
+            numberText.text = counter + "";
+
+            particles.transform.position = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            particles.Play();
+
+            GetComponent<AudioSource>().PlayOneShot(soundClip);
+
+            if (counter <= 0)
+            {
+                //winPanel.SetActive(true);
+
+                //force options to be not open
+                optionCanvas.gameObject.SetActive(false);
+                StartCoroutine(FadeInWinPanel(winPanel, 0.5f));
+            }
+
+            //ChangeSprite(rayHit.collider.GetComponent<SpriteRenderer>().sprite);
         }
-
-        rayHit.collider.GetComponent<SpriteRenderer>().color = myColour;
-        print(rayHit.collider.gameObject.name + " colour changed but smartly! ");
-
-        counter--;
-        numberText.text = counter + "";
-
-        particles.transform.position = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        particles.Play();
-
-        GetComponent<AudioSource>().PlayOneShot(soundClip);
-
-        if (counter <= 0)
-        {
-            //winPanel.SetActive(true);
-            StartCoroutine(FadeInWinPanel(winPanel, 0.5f));
-        }
-
-        //ChangeSprite(rayHit.collider.GetComponent<SpriteRenderer>().sprite);
-
     }
 
     IEnumerator FadeInWinPanel(GameObject panel, float duration)
